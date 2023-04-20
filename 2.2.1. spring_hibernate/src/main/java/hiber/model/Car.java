@@ -2,6 +2,7 @@ package hiber.model;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -9,13 +10,16 @@ import javax.persistence.*;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "model")
     private String model;
 
     @Column(name = "series")
-    int series;
+    private int series;
 
+    @OneToOne(mappedBy = "car")
+    private User user;
 
     public Car() {
     }
@@ -24,10 +28,6 @@ public class Car {
         this.model = model;
         this.series = series;
     }
-
-
-    @OneToOne(mappedBy = "car")
-    private User user;
 
     public Long getId() {
         return id;
@@ -60,6 +60,22 @@ public class Car {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return series == car.series && Objects.equals(id, car.id) && Objects.equals(model, car.model) && Objects.equals(user, car.user);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + series;
+        return result;
     }
 
     @Override

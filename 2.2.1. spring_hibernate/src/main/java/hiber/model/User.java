@@ -1,6 +1,7 @@
 package hiber.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +21,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private Car car;
@@ -27,7 +29,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email,Car car) {
+    public User(String firstName, String lastName, String email, Car car) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -75,8 +77,22 @@ public class User {
         this.car = car;
     }
 
-    public void setUserCar(Car userCar) {
-        this.car = userCar;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(car, user.car);
+    }
+
+    @Override
+    public int hashCode() {
+            int result = car != null ? car.hashCode() : 0;
+            result = 31 * result + (id != null ? id.hashCode() : 0);
+            result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+            result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+            result = 31 * result + (email != null ? email.hashCode() : 0);
+            return result;
     }
 
     @Override

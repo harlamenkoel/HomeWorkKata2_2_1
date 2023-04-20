@@ -6,11 +6,10 @@ import hiber.model.User;
 import hiber.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class MainApp {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
@@ -26,17 +25,18 @@ public class MainApp {
                 new Car("Moskvich", 299)));
 
 
-        List<User> users = userService.listUsers();
+        List<User> users = userService.getListUsers();
         for (User user : users) {
             System.out.println("Id = " + user.getId());
             System.out.println("First Name = " + user.getFirstName());
             System.out.println("Last Name = " + user.getLastName());
             System.out.println("Email = " + user.getEmail());
-            System.out.println("Car = " + user.getCar().getModel()+" "+user.getCar().getSeries());
+            System.out.println("Car = " + user.getCar().getModel() + " " + user.getCar().getSeries());
             System.out.println();
 
         }
         System.out.println(userService.getUserCar("Moskvich", 299).toString());
+
         context.close();
     }
 }
